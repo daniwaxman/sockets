@@ -1,7 +1,18 @@
+module.exports = function(io, connectedUsers) {
+  io.on('connection', (socket) => {
+    console.log('connected: ', socket.id)
 
-function socketEvents(io) {
-  io.on('connection', function(socket) {
-    console.log('a client has connected');
+    connectedUsers[socket.id] = `user ${Object.keys(connectedUsers).length}`;
+    console.log(connectedUsers);
+
+    // socket.on('message', (message) => {
+    //   socket.emit('ditConsumer', message.value);
+    //   console.log('from console', message.value);
+    // });
+
+    socket.on('disconnect', () => {
+      delete connectedUsers[socket.id];
+      // io.emit('user disconnected');
+    });
   });
-}
-module.exports = socketEvents;
+};
